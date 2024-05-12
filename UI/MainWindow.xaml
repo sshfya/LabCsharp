@@ -1,0 +1,90 @@
+﻿<Window x:Class="UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        
+        xmlns:local="clr-namespace:UI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <DataTemplate x:Key="SplineDataItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontSize="10" Text="{Binding Path=[0]}" HorizontalAlignment="Left" Width="50" />
+                <TextBlock FontSize="10" Text=" " HorizontalAlignment="Left" Width="10" />
+                <TextBlock FontSize="10" Text="{Binding Path=[1]}" HorizontalAlignment="Left" Width="50"/>
+                <TextBlock FontSize="10" Text=" " HorizontalAlignment="Left" Width="10" />
+                <TextBlock FontSize="10" Text="{Binding Path=[2]}" HorizontalAlignment="Left" Width="50"/>
+            </StackPanel>
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="SmoothSplineTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontSize="10" Text="{Binding [0]}" HorizontalAlignment="Left" Width="100" />
+                <TextBlock FontSize="10" Text=" " HorizontalAlignment="Left" Width="10"/>
+                <TextBlock FontSize="10" Text="{Binding [1]}" HorizontalAlignment="Left" Width="100"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Name="GridMain">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF25DC9F"/>
+                <GradientStop Color="#FFC0F4F6" Offset="1"/>
+                <GradientStop Color="#FFC0F6EA" Offset="0.67"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="19,22,0,0" TextWrapping="Wrap" Text="Границы отрезка" VerticalAlignment="Top" Width="155"/>
+        <TextBox Name="Bounds" HorizontalAlignment="Left" Margin="19,38,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="19,59,0,0" TextWrapping="Wrap" Text="Число узлов сетки" VerticalAlignment="Top" Width="155"/>
+        <TextBox Name="N_grid_nodes" HorizontalAlignment="Left" Margin="19,76,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <ComboBox Name="Uniformity" HorizontalAlignment="Left" Margin="19,118,0,0" VerticalAlignment="Top" Width="120" >
+            <ComboBoxItem Content="Равномерная"/>
+            <ComboBoxItem Content="Неравномерная"/>
+        </ComboBox>
+        <TextBlock HorizontalAlignment="Left" Margin="19,102,0,0" TextWrapping="Wrap" Text="Тип сетки" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="19,150,0,0" TextWrapping="Wrap" Text="Функция для вычисления значений компоненты поля" VerticalAlignment="Top" Width="155"/>
+        <ComboBox Name="Func" HorizontalAlignment="Left" Margin="19,182,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem Content="X^3"/>
+            <ComboBoxItem Content="Sin(X)"/>
+        </ComboBox>
+        <TextBlock HorizontalAlignment="Left" Margin="19,206,0,0" TextWrapping="Wrap" Text="Число узлов сглаживающего сплайна" VerticalAlignment="Top" Width="155"/>
+        <TextBox Name="N_smooth_spline" HorizontalAlignment="Left" Margin="19,241,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,268,0,0" TextWrapping="Wrap" Text="Число узлов равномерной сетки" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0.004"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBlock.RenderTransform>
+        </TextBlock>
+        <TextBox Name="N_small_grid" HorizontalAlignment="Left" Margin="19,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="19,330,0,0" TextWrapping="Wrap" Text="Норма невязки" VerticalAlignment="Top" Height="14" Width="120"/>
+        <TextBox Name="StopR" HorizontalAlignment="Left" Margin="19,346,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="19,372,0,0" TextWrapping="Wrap" Text="Максимальное число итераций" VerticalAlignment="Top" Height="14" Width="176"/>
+        <TextBox Name="MaxIt" HorizontalAlignment="Left" Margin="19,388,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBlock HorizontalAlignment="Left" Margin="193,21,0,0" TextWrapping="Wrap" Text="Информация о сплайне" VerticalAlignment="Top"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="453,21,0,0" TextWrapping="Wrap" Text="Значения сглаживающего сплайна на более мелкой сетке" VerticalAlignment="Top"/>
+
+        <Menu Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90">
+            <MenuItem Header="File">
+                <MenuItem Name="Save" Command="{Binding SaveCommand}" Header="Save"/>
+            </MenuItem>
+            <MenuItem Header="Execute">
+                <MenuItem Name="Controls" Command="{Binding DataFromControlsCommand}" Header="Data from Controls"/>
+                <MenuItem Name="File" Command="{Binding DataFromFileCommand}" Header="Data from File"/>
+            </MenuItem>
+        </Menu>
+        <Button Name="SaveB" Command="{Binding SaveCommand}" Content="Save" HorizontalAlignment="Left" Margin="551,391,0,0" VerticalAlignment="Top"/>
+        <Button Name="FileB" Command="{Binding DataFromFileCommand}" Content="Data from File" HorizontalAlignment="Left" Margin="585,391,0,0" VerticalAlignment="Top"/>
+        <Button Name="ControlsB" Command="{Binding DataFromControlsCommand}" Content="Data from Controls" HorizontalAlignment="Left" Margin="669,391,0,0" VerticalAlignment="Top"/>
+        <ListBox Name="SplineData" Margin="191,47,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="243" ItemTemplate="{StaticResource SplineDataItemTemplate}"/>
+        <ListBox Name="Values" Margin="452,47,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="80" Width="300" ItemTemplate="{StaticResource SmoothSplineTemplate}"/>
+        <oxy:PlotView Name="Plotter" HorizontalAlignment="Left" Margin="193,150,0,0" VerticalAlignment="Top" Height="214" Width="559"/>
+    </Grid>
+</Window>
